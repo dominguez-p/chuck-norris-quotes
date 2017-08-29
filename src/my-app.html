@@ -164,6 +164,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _showPage404() {
         this.page = 'not-found';
       }
+      getQuote() {
+        // get a quote from the API
+        this.$.getQuoteAjax.generateRequest();
+    }
     }
 
     window.customElements.define(MyApp.is, MyApp);
