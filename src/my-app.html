@@ -24,6 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="lazy-import" href="home-page.html">
 <link rel="lazy-import" href="register-login.html">
+<link rel="import" href="app-data.html">
 <link rel="lazy-import" href="secret-quotes.html">
 <link rel="lazy-import" href="not-found.html">
 
@@ -139,7 +140,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             observer: '_pageChanged',
           },
           routeData: Object,
-          storedUser: Object,
+          storedUser:Object,
           subroute: String,
           // This shouldn't be neccessary, but the Analyzer isn't picking up
           // Polymer.Element#rootPath
