@@ -16,6 +16,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="app-data.html">
+<link rel="import" href="log-out.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="register-login">
@@ -67,7 +69,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
           <div>
             <label>Username</label>
-            <iron-input bind-value="{{formData.username}}">
+            <iron-input bind-value="{{formData.nombre}}">
               <input  id="username" type="text"></iron-input>
             </iron-input>
           </div>
@@ -86,10 +88,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div id="authenticated" hidden$="[[!storedUser.loggedin]]">
         <h2>Hello, [[storedUser.name]]!</h2>
         <p>You are currently logged in. You can access <a href="/secret-quotes">Secret Quotes</a>!</p>
-        <paper-button raised on-tap="logout">Log Out</paper-button>
+        <log-out stored-user="{{storedUser}}"></log-out>
     </div>
   </div>
-
+  <app-data key="userData" data="{{storedUser}}"></app-data>
   <app-location route="{{route}}"></app-location>
 
   </template>
@@ -101,7 +103,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return {
           formData: {
             type: Object,
-            value: {"username": "gonto", "password": "gonto"}
+            value: {"nombre":"","password":""}
           },
           storedUser: Object,
           error: String,
@@ -116,40 +118,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.registerLoginAjax.body = this.formData;
       }
       postLogin() {
-        this.$.registerLoginAjax.url = 'http://localhost:3001/sessions/create';
+        this.$.registerLoginAjax.url = 'http://postgrebc9688.cloudapp.net:3000/api/login';
         this._setReqBody();
         this.$.registerLoginAjax.generateRequest();
       }
       postRegister() {
-        this.$.registerLoginAjax.url = 'http://localhost:3001/users';
+        this.$.registerLoginAjax.url = 'http://postgrebc9688.cloudapp.net:3000/api/usuarios';
         this._setReqBody();
         this.$.registerLoginAjax.generateRequest();
       }
       handleUserResponse(event) {
         var response = JSON.parse(event.detail.response);
         
-        if (response.id_token) {
+        if (response.data.count > 0) {
             this.error = '';
             this.storedUser = {
-                name: this.formData.username,
+                name: this.formData.nombre,
                 id_token: response.id_token,
                 access_token: response.access_token,
                 loggedin: true
             };
             // redirect to Secret Quotes
             this.set('route.path', '/secret-quotes')
+        } else {
+          this.error="Login incorrecto!"
+          // reset form data
+          this.formData = {"nombre":"","password":""};
         }
     
-        // reset form data
-        this.formData = {};
+        
       }
       handleUserError(event) {
         this.error = event.detail.request.xhr.response;
         console.log(this.error);
-      }
-      logout() {
-        // remove user data
-        this.storedUser = null;
       }
     }
 
