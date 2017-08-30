@@ -1,0 +1,32 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+<dom-module id="log-out">
+    <template>
+        <style>
+            :host {
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+
+        <!-- MARKUP GOES HERE -->
+        
+        
+        <template is="dom-if" if="{{!link}}">
+            <paper-button raised on-tap="logout">Log Out</paper-button>
+        </template>
+        
+        <template is="dom-if" if="{{link}}">
+            <a on-tap="logout" href>Log Out</a>
+        </template>        
+    </template>
+
+    <script>
+        (function() {
+            Polymer({
+                is: 'log-out'
+            });
+        }());
+    </script>
+</dom-module>

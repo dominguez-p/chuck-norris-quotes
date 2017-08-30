@@ -15,6 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-input/iron-input.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="register-login">
@@ -39,6 +40,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-size: 14px;
         padding: 10px;
       }
+      paper-button {
+        background: #f44336;
+        color: #fff;
+        font-weight: bold;
+      }
+      
     </style>
     <iron-ajax
       id="registerLoginAjax"
@@ -49,33 +56,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       on-error="handleUserError">
     </iron-ajax>
     <div class="card">
-      <div id="unauthenticated">
+      <div id="unauthenticated" hidden$="[[storedUser.loggedin]]">
           <h1>Log In</h1>
   
           <p><strong>Log in</strong> or <strong>sign up</strong> to access secret Chuck Norris quotes!</p>
           
+          <template is="dom-if" if="[[error]]">
+            <p class="alert-error"><strong>Error:</strong> [[error]]</p>
+          </template>
+          <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
+          <div>
             <label>Username</label>
             <iron-input bind-value="{{formData.username}}">
               <input  id="username" type="text"></iron-input>
             </iron-input>
-          
-          <p>{{formData.username}}</p>
-          <template is="dom-if" if="[[error]]">
-            <p class="alert-error"><strong>Error:</strong> [[error]]</p>
-          </template>
-          
-              <label>Password</label>
-              <iron-input>
-                <input id="password" type="password" value="{{formData.password::input}}"></iron-input>
-              </iron-input>
-          
+          </div>
+          <div>
+            <label>Password</label>
+            <iron-input>
+              <input id="password" type="password" value="{{formData.password::input}}"></iron-input>
+            </iron-input>
+          </div>
   
           <div class="wrapper-btns">
               <paper-button raised class="primary" on-tap="postLogin">Log In</paper-button>
               <paper-button class="link" on-tap="postRegister">Sign Up</paper-button>
           </div>
-      </div>    
+      </div>
+      <div id="authenticated" hidden$="[[!storedUser.loggedin]]">
+        <h2>Hello, [[storedUser.name]]!</h2>
+        <p>You are currently logged in. You can access <a href="/secret-quotes">Secret Quotes</a>!</p>
+        <paper-button raised on-tap="logout">Log Out</paper-button>
+    </div>
   </div>
+
+  <app-location route="{{route}}"></app-location>
 
   </template>
 
@@ -121,6 +136,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 access_token: response.access_token,
                 loggedin: true
             };
+            // redirect to Secret Quotes
+            this.set('route.path', '/secret-quotes')
         }
     
         // reset form data
@@ -129,6 +146,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       handleUserError(event) {
         this.error = event.detail.request.xhr.response;
         console.log(this.error);
+      }
+      logout() {
+        // remove user data
+        this.storedUser = null;
       }
     }
 
