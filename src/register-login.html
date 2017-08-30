@@ -57,6 +57,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       on-response="handleUserResponse"
       on-error="handleUserError">
     </iron-ajax>
+
     <div class="card">
       <div id="unauthenticated" hidden$="[[storedUser.loggedin]]">
           <h1>Log In</h1>
@@ -66,7 +67,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <template is="dom-if" if="[[error]]">
             <p class="alert-error"><strong>Error:</strong> [[error]]</p>
           </template>
-          <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
+          
           <div>
             <label>Username</label>
             <iron-input bind-value="{{formData.nombre}}">
@@ -91,10 +92,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <log-out stored-user="{{storedUser}}"></log-out>
     </div>
   </div>
+  <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
   <app-data key="userData" data="{{storedUser}}"></app-data>
   <app-location route="{{route}}"></app-location>
-
-  </template>
+</template>
 
   <script>
     class MyView2 extends Polymer.Element {
@@ -103,7 +104,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return {
           formData: {
             type: Object,
-            value: {"nombre":"","password":""}
+            value: {}
           },
           storedUser: Object,
           error: String,
@@ -139,7 +140,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 loggedin: true
             };
             // redirect to Secret Quotes
-            this.set('route.path', '/secret-quotes')
+            //this.set('route.path', '/secret-quotes')
         } else {
           this.error="Login incorrecto!"
           // reset form data
