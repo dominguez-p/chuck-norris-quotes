@@ -2,7 +2,7 @@
   "entrypoint": "index.html",
   "shell": "src/my-app.html",
   "fragments": [
-    "src/home-quotes.html",
+    "src/home-page.html",
     "src/register-login.html",
     "src/secret-quotes.html",
     "src/not-found.html"

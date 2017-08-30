@@ -13,7 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="home-quotes">
+<dom-module id="home-page">
   <template>
     <style include="shared-styles">
       :host {
@@ -40,7 +40,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     class MyView1 extends Polymer.Element {
 
-      static get is() { return 'home-quotes'; }
+      static get is() { return 'home-page'; }
       getQuote() {
         // get a quote from the API
         this.$.getQuoteAjax.generateRequest();
