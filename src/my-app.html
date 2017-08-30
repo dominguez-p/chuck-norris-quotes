@@ -22,10 +22,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
 
-<link rel="lazy-import" href="my-view1.html">
-<link rel="lazy-import" href="my-view2.html">
-<link rel="lazy-import" href="my-view3.html">
-<link rel="lazy-import" href="my-view404.html">
+<link rel="lazy-import" href="home-quotes.html">
+<link rel="lazy-import" href="register-login.html">
+<link rel="lazy-import" href="secret-quotes.html">
+<link rel="lazy-import" href="not-found.html">
 
 <dom-module id="my-app">
   <template>
@@ -106,10 +106,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <register-login name="register-login"></register-login>
             <secret-quotes name="secret-quotes"></secret-quotes>
             <not-found name="not-found"></not-found>
-          <!-- <my-view1 name="view1"></my-view1>
-          <my-view2 name="view2"></my-view2>
-          <my-view3 name="view3"></my-view3>
-          <my-view404 name="view404"></my-view404> -->
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
@@ -164,10 +160,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _showPage404() {
         this.page = 'not-found';
       }
-      getQuote() {
-        // get a quote from the API
-        this.$.getQuoteAjax.generateRequest();
-    }
+
     }
 
     window.customElements.define(MyApp.is, MyApp);

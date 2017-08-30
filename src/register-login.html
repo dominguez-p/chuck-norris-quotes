@@ -9,6 +9,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/promise-polyfill/promise-polyfill-lite.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../bower_components/iron-input/iron-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="register-login">
@@ -19,19 +25,111 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         padding: 10px;
       }
+      .wrapper-btns {
+        margin-top: 15px;
+      }
+      paper-button.link {
+        color: #757575;
+      }
+      .alert-error {
+        background: #ffcdd2;
+        border: 1px solid #f44336;
+        border-radius: 3px;
+        color: #333;
+        font-size: 14px;
+        padding: 10px;
+      }
     </style>
-
+    <iron-ajax
+      id="registerLoginAjax"
+      method="post"
+      content-type="application/json"
+      handle-as="text"
+      on-response="handleUserResponse"
+      on-error="handleUserError">
+    </iron-ajax>
     <div class="card">
-      <div class="circle">2</div>
-      <h1>View Two</h1>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-      <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
-    </div>
+      <div id="unauthenticated">
+          <h1>Log In</h1>
+  
+          <p><strong>Log in</strong> or <strong>sign up</strong> to access secret Chuck Norris quotes!</p>
+          
+            <label>Username</label>
+            <iron-input bind-value="{{formData.username}}">
+              <input  id="username" type="text"></iron-input>
+            </iron-input>
+          
+          <p>{{formData.username}}</p>
+          <template is="dom-if" if="[[error]]">
+            <p class="alert-error"><strong>Error:</strong> [[error]]</p>
+          </template>
+          
+              <label>Password</label>
+              <iron-input>
+                <input id="password" type="password" value="{{formData.password::input}}"></iron-input>
+              </iron-input>
+          
+  
+          <div class="wrapper-btns">
+              <paper-button raised class="primary" on-tap="postLogin">Log In</paper-button>
+              <paper-button class="link" on-tap="postRegister">Sign Up</paper-button>
+          </div>
+      </div>    
+  </div>
+
   </template>
 
   <script>
     class MyView2 extends Polymer.Element {
       static get is() { return 'register-login'; }
+      static get properties() {
+        return {
+          formData: {
+            type: Object,
+            value: {"username": "gonto", "password": "gonto"}
+          },
+          storedUser: Object,
+          error: String,
+          handleResponse: {
+            type: Object,
+            notify: true,
+            readOnly: true 
+          }
+        }
+      }
+      _setReqBody() {
+        this.$.registerLoginAjax.body = this.formData;
+      }
+      postLogin() {
+        this.$.registerLoginAjax.url = 'http://localhost:3001/sessions/create';
+        this._setReqBody();
+        this.$.registerLoginAjax.generateRequest();
+      }
+      postRegister() {
+        this.$.registerLoginAjax.url = 'http://localhost:3001/users';
+        this._setReqBody();
+        this.$.registerLoginAjax.generateRequest();
+      }
+      handleUserResponse(event) {
+        var response = JSON.parse(event.detail.response);
+        
+        if (response.id_token) {
+            this.error = '';
+            this.storedUser = {
+                name: this.formData.username,
+                id_token: response.id_token,
+                access_token: response.access_token,
+                loggedin: true
+            };
+        }
+    
+        // reset form data
+        this.formData = {};
+      }
+      handleUserError(event) {
+        this.error = event.detail.request.xhr.response;
+        console.log(this.error);
+      }
     }
 
     window.customElements.define(MyView2.is, MyView2);
