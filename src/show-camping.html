@@ -1,0 +1,113 @@
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="app-data.html">
+<link rel="import" href="all-campings.html"> 
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="register-login.html">
+
+<dom-module id="show-camping">
+    <template>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <style include="shared-styles">
+            :host {
+            display: block;
+    
+            padding: 10px;
+            }
+            .thumbnail img {
+                width: 100%;
+            }
+
+            .thumbnail {
+                padding: 0;
+            }
+
+            .thumbnail .caption-full {
+                padding: 9px;
+            }
+
+            .delete-form {
+                display: inline;
+            }
+
+
+        </style>
+        <iron-localstorage name="id_camping" value="{{id_camping}}"></iron-localstorage> 
+        <iron-localstorage name="urlCamping" value="{{urlCamping}}"></iron-localstorage>
+        <iron-ajax
+            auto
+            id="oneCampingAjax"
+            url=[[urlCamping]]
+            params='{"apiKey":"qpnQ2vCoFR8HMb_cf0vFfyP0B99yUKGL"}'
+            handle-as="json"
+            loading="Getting..."
+            method="GET"
+            content-type="application/json"
+            on-response="handlePosts">
+        </iron-ajax>
+        <button type="button" name="posts2" on-click="getPost">Get one Posts</button>
+        <h1>[[name]]</h1>          
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <p class="lead">YelpCamp</p>
+                    <div class="list-group">
+                        <li class="list-group-item active">Info 1</li>
+                        <li class="list-group-item">Info 2</li>
+                        <li class="list-group-item">Info 3</li>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="thumbnail">
+                        <img class="image-responsive" src="[[image]]">
+                        <div class="caption-full">
+                            <h4><a>[[name]]</a></h4>
+                            <p>[[description]]</p>
+                            <p>
+                                <em>Submitted by: </em>
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="/all-campings">Volver</a>
+
+    </template>
+      
+    <script>
+        class MyView5 extends Polymer.Element {
+        static get is() { return 'show-camping'; }
+        static get properties() {
+            return {
+            campìng: Object
+            }
+        }
+        // getPost() {
+        //     var datosLeidos = JSON.parse(localStorage.getItem("urlCamping"));
+        //     //      console.log("funcion getPost");
+        //     this.$.oneCampingAjax.url = datosLeidos;
+        //     console.log(this.$.oneCampingAjax.url);
+        //     this.$.oneCampingAjax.generateRequest();
+            
+        //     this.image = request.response.image;
+        //     // this.description = request.response.description;
+        //     // this.$.oneCampingAjax.generateRequest();
+            
+        // }
+        handlePosts(e,request){
+            console.log(request.response);
+            this.set('camping',request.response);           
+            this.name = request.response.name;
+            this.image = request.response.image;
+            this.description = request.response.description;                      
+        }
+        }          
+        window.customElements.define(MyView5.is, MyView5);
+    </script>
+</dom-module>

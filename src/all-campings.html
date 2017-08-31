@@ -45,7 +45,9 @@
             content-type="application/json"
             on-response="handlePosts">
         </iron-ajax>
-        <button type="button" name="posts" on-click="getPosts">Get All Posts</button>
+        <iron-localstorage name="id_camping" value="{{id_camping}}"></iron-localstorage>
+        <iron-localstorage name="urlCamping" value="{{urlCamping}}"></iron-localstorage>
+        <!-- <button type="button" name="posts" on-click="getPost">Get one Posts</button> -->
         <div class="container">
             <header class="card">
                 <div class="container">
@@ -58,21 +60,24 @@
             </header>
             
             <div class="row text-center" style="display:flex; flex-wrap: wrap;">
-                <div class="col-md-3 col-sm-6">
-                    <template is="dom-repeat" items="[[posts]]">    
+                <template is="dom-repeat" items="[[posts]]"> 
+                    <div class="col-md-3 col-sm-6">
+                       
                         <div class="thumbnail">
                             
                         <img src="[[item.image]]">                            
                         <h1>[[item.name]]</h1>
                         <div class="caption">
                             <h4>[[item.description]]</h4>
+                            <h4>[[item._id.$oid]]</h4>
                         </div>
                         <p>
-                            <a href="#" class="btn btn-primary">More Info</a>
-                        </p>
-                    </template>
-                </div>                            
+                            <a on-click="seleccionado" data-item$="[[item._id.$oid]]" class="btn btn-primary" href="/show-camping">More Info</a>                            
+                        </p>                
+                    </div>                            
+                </template>
              </div>
+            
         </div>
             
         <div class="row">
@@ -80,9 +85,6 @@
                 <h3>Our Most Popular Campgrounds!</h3>
             </div>
         </div>
-      
-        <app-data key="userData" data="{{storedUser}}"></app-data>
-          
     </template>
       
     <script>
@@ -90,16 +92,38 @@
         static get is() { return 'all-campings'; }
         static get properties() {
             return {
-            posts: Array
+                posts: Array
+                }
             }
-        }
-        getPosts(){          
-            this.$.allCampingsAjax.generateRequest();
-        }
-        handlePosts(e,request){
-            this.set('posts',request.response)
-            console.log(this.posts);
-        }
+            getPosts(){   
+                console.log("funcion getPosts");       
+                this.$.allCampingsAjax.generateRequest();
+            }
+            seleccionado(event) {
+                var item = event.target.dataset.item;
+                // this.$.allCampingsAjax.url += "/" + item
+                // this.$.allCampingsAjax.generateRequest();
+                this.id_camping = item;
+                this.urlCamping = this.$.allCampingsAjax.url + "/" + item
+                console.log(this.urlCamping);
+            }
+            // getPost() {
+            //     this.$.allCampingsAjax.url += item
+            //     this.$.allCampingsAjax.generateRequest();
+            // }
+            // getPost() {
+            //     console.log("funcion getPost");
+            //     // this.$.allCampingsAjax.url += '/599ab92ef3a8013716dfb087'
+            //     this.$.allCampingsAjax.generateRequest();
+            //     this.name = request.response.name;
+            //     this.image = request.response.image;
+            //     this.description = request.response.description;
+            //   }
+            handlePosts(e,request){
+                console.log(request.response);
+                this.set('posts',request.response)
+            }
+
         }          
         window.customElements.define(MyView4.is, MyView4);
     </script>

@@ -6,7 +6,8 @@
     "src/register-login.html",
     "src/secret-quotes.html",
     "src/not-found.html",
-    "src/all-campings.ejs"
+    "src/all-campings.html",
+    "src/show-camping.html"
   ],
   "sources": [
     "src/**/*",

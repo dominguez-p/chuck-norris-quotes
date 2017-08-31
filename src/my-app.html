@@ -27,7 +27,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="lazy-import" href="register-login.html">
 <link rel="lazy-import" href="secret-quotes.html">
 <link rel="lazy-import" href="not-found.html">
-<link rel="lazy-import" href="all-campings.ejs">
+<link rel="lazy-import" href="all-campings.html">
+<link rel="lazy-import" href="show-camping.html">
 
 <dom-module id="my-app">
   <template>
@@ -96,6 +97,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <a name="home-page" href="[[rootPath]]home-page">Home</a>
           <a name="secret-quotes" href="[[rootPath]]secret-quotes">Secret Quotes</a>
           <a name="all-campings" href="[[rootPath]]all-campings">Campings</a>
+          <a name="show-camping" href="[[rootPath]]show-camping">One Camping</a>
         </iron-selector>
       </app-drawer>
 
@@ -123,6 +125,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <secret-quotes name="secret-quotes"></secret-quotes>
             <not-found name="not-found"></not-found>
             <all-campings name="all-campings"></all-campings>
+            <show-camping name="show-camping"></show-camping>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
