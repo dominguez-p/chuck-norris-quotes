@@ -129,8 +129,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.registerLoginAjax.generateRequest();
       }
       handleUserResponse(event) {
+
         var response = JSON.parse(event.detail.response);
-        
+
         if (response.data.count > 0) {
             this.error = '';
             this.storedUser = {

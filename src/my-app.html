@@ -21,12 +21,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
+<link rel="import" href="app-data.html">
 
 <link rel="lazy-import" href="home-page.html">
 <link rel="lazy-import" href="register-login.html">
-<link rel="import" href="app-data.html">
 <link rel="lazy-import" href="secret-quotes.html">
 <link rel="lazy-import" href="not-found.html">
+<link rel="lazy-import" href="all-campings.ejs">
 
 <dom-module id="my-app">
   <template>
@@ -94,7 +95,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="home-page" href="[[rootPath]]home-page">Home</a>
           <a name="secret-quotes" href="[[rootPath]]secret-quotes">Secret Quotes</a>
-          
+          <a name="all-campings" href="[[rootPath]]all-campings">Campings</a>
         </iron-selector>
       </app-drawer>
 
@@ -121,6 +122,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <register-login name="register-login"></register-login>
             <secret-quotes name="secret-quotes"></secret-quotes>
             <not-found name="not-found"></not-found>
+            <all-campings name="all-campings"></all-campings>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>

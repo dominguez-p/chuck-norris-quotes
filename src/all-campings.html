@@ -1,0 +1,157 @@
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="register-login.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="app-data.html">
+
+
+<dom-module id="all-campings">
+    <template>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <style include="shared-styles">
+            :host {
+            display: block;
+    
+            padding: 10px;
+            }
+            .thumbnail img {
+                width: 100%;
+            }
+
+            .thumbnail {
+                padding: 0;
+            }
+
+            .thumbnail .caption-full {
+                padding: 9px;
+            }
+
+            .delete-form {
+                display: inline;
+            }
+
+
+        </style>
+        <iron-ajax
+            auto
+            id="allCampingsAjax"
+            url='https://api.mlab.com/api/1/databases/yelpcamp2017/collections/campgrounds'
+            params='{"apiKey":"qpnQ2vCoFR8HMb_cf0vFfyP0B99yUKGL"}'
+            handle-as="json"
+            loading="Getting..."
+            method="GET"
+            content-type="application/json"
+            on-response="handlePosts">
+        </iron-ajax>
+        <button type="button" name="posts" on-click="getPosts">Get All Posts</button>
+        <div class="container">
+            <header class="card">
+                <div class="container">
+                    <h1>Welcome to YelpCamp!</h1>  
+                    <p>View our hand-picked campgrounds from all over the world</p>
+                    <p>
+                        <a class="btn btn-primary btn-lg" href="#">Add New Campground</a></a>
+                    </p>
+                </div>
+            </header>
+            
+            <div class="row text-center" style="display:flex; flex-wrap: wrap;">
+                <div class="col-md-3 col-sm-6">
+                    <template is="dom-repeat" items="[[posts]]">    
+                        <div class="thumbnail">
+                            
+                        <img src="[[item.image]]">                            
+                        <h1>[[item.name]]</h1>
+                        <div class="caption">
+                            <h4>[[item.description]]</h4>
+                        </div>
+                        <p>
+                            <a href="#" class="btn btn-primary">More Info</a>
+                        </p>
+                    </template>
+                </div>                            
+             </div>
+        </div>
+            
+        <div class="row">
+            <div class="col-lg-12">
+                <h3>Our Most Popular Campgrounds!</h3>
+            </div>
+        </div>
+      
+        <app-data key="userData" data="{{storedUser}}"></app-data>
+          
+    </template>
+      
+    <script>
+        class MyView4 extends Polymer.Element {
+        static get is() { return 'all-campings'; }
+        static get properties() {
+            return {
+            posts: Array
+            }
+        }
+        getPosts(){          
+            this.$.allCampingsAjax.generateRequest();
+        }
+        handlePosts(e,request){
+            this.set('posts',request.response)
+            console.log(this.posts);
+        }
+        }          
+        window.customElements.define(MyView4.is, MyView4);
+    </script>
+</dom-module>
+
+<!-- <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="all-campings">
+ <template>
+     <style include="shared-styles">
+         :host {
+             font-style: italic;
+             display: inline-block;
+         }
+     </style>
+
+     <button type="button" name="posts" on-click="getPosts">Get All Posts</button>
+
+     <iron-ajax
+       id="allCampingsAjax"
+       url='https://api.mlab.com/api/1/databases/bootcamp/collections/posts'      
+       params='{"apiKey":"qpnQ2vCoFR8HMb_cf0vFfyP0B99yUKGL"}'
+       handle-as="json"
+       loading="Getting..."
+       method="GET"
+       content-type="application/json"
+       on-response="handlePosts"
+     ></iron-ajax>
+
+     <div id="post-list">
+         <template is="dom-repeat" items="[[posts]]">
+           {{item.titulo}}
+           {{item.texto}}
+         </template>
+     </div>
+ </template>
+ <script>  
+     Polymer ({
+       is: 'all-campings',
+       properties: {
+         posts: Array
+       },
+       getPosts: function (){          
+           this.$.allCampingsAjax.generateRequest();
+       },
+       handlePosts: function (e,request){
+         this.set('posts',request.response)
+         console.log(this.posts);
+       }
+     })
+ </script>
+</dom-module> -->
