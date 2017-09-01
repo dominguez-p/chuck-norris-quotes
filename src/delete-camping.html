@@ -1,0 +1,73 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="app-data.html">
+
+<dom-module id="delete-camping">
+    <template>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <style>
+            /* :host {
+                margin: 0;
+                padding: 0;
+            }
+            paper-button {
+                background: #f44336;
+                color: #fff;
+                font-weight: bold;
+            }
+            a {
+                color: #fff;
+                display: inline-block;
+                font-size: 20px;
+            } */
+
+        </style>
+        <iron-ajax
+            id="deleteCampingAjx"
+            url='https://api.mlab.com/api/1/databases/yelpcamp2017/collections/campgrounds'
+            params='{"apiKey":"qpnQ2vCoFR8HMb_cf0vFfyP0B99yUKGL"}'
+            method="DELETE"
+            content-type="application/json"
+            handle-as="text"
+            on-response="handleUserResponse"
+            on-error="handleUserError">
+        </iron-ajax>
+        
+        <app-data key="camping" data="{{camping}}"></app-data>
+        <paper-button class="btn btn-xs btn-danger" raised on-tap="delete" href="all-campings">Delete</paper-button>
+        <h1>{{camping.id}}</h1>
+        <!-- <template is="dom-if" if="{{!link}}">
+            <paper-button raised on-tap="logout">Log Out</paper-button>
+        </template>
+
+        <template is="dom-if" if="{{link}}">
+            <a on-tap="logout" href>Log Out</a>
+        </template> -->
+    </template>
+
+    <script>
+        (function() {
+            Polymer({
+                is: 'delete-camping',
+                properties: {
+                    camping: Object,
+                },
+                delete: function() {
+                    // remove user data
+                    // this.storedUser = null;
+                    var id = this.camping.id;
+                    console.log("id a borrar: " + id);
+                    this.$.deleteCampingAjx.url += "/" + id;
+                    this.$.deleteCampingAjx.generateRequest();
+                    console.log("camping borrado!!");
+                },
+                handleUserResponse: function() {
+                    // this.set('route.path', '/all-campings');
+                }
+                    
+                
+            });
+        }());
+    </script>
+</dom-module>

@@ -12,7 +12,7 @@
             id="createCampingAjx"
             url='https://api.mlab.com/api/1/databases/yelpcamp2017/collections/campgrounds'
             params='{"apiKey":"qpnQ2vCoFR8HMb_cf0vFfyP0B99yUKGL"}'
-            method="post"
+            method="POST"
             content-type="application/json"
             handle-as="text"
             on-response="handleUserResponse"
@@ -22,23 +22,31 @@
         <div class="row">
                 <h1 style="text-align: center">Create a new campground</h1>
                 <div style="width: 30%; margin: 25px auto">
-                    <form action="/campgrounds" method="POST">
+                    <!-- <form action="/campgrounds" method="POST"> -->
                         <div class="form-group">
-                            <input class="form-control" type="text" name="name" placeholder="name">    
+                            <iron-input bind-value="{{newCampingObj.nombre}}">
+                                <input class="form-control" type="text" name="name" placeholder="name">
+                            </iron-input>
                         </div>
                         <div class="form-group">
-                            <input class="form-control" type="number" name="price" placeholder="price" min="0.01" step="0.01">
+                            <iron-input bind-value="{{newCampingObj.price}}">
+                                <input class="form-control" type="number" name="price" placeholder="price" min="0.01" step="0.01">
+                            </iron-input>
                         </div>
                         <div class="form-group">
-                            <input class="form-control" type="text" name="image" placeholder="image url">    
+                            <iron-input  bind-value="{{newCampingObj.image}}">
+                                <input class="form-control" type="text" name="image" placeholder="image url">    
+                            </iron-input>
                         </div>
                         <div class="form-group">
-                            <input class="form-control" type="text" name="description" placeholder="description">    
+                            <iron-input bind-value="{{newCampingObj.description}}">
+                                <input class="form-control" name="description" placeholder="description"></input>    
+                            </iron-input>
                         </div>                
                         <div class="form-group">
-                            <button class="btn btn-lg btn-control btn-block btn-primary">Submit!</button>    
+                            <button on-click="createCampimg" class="btn btn-lg btn-control btn-block btn-primary">Submit!</button>    
                         </div>
-                    </form>
+                    <!-- </form> -->
                     <a href="/all-campings">Go Back</a>              
                 </div>
             </div>
@@ -49,13 +57,35 @@
         static get is() { return 'new-camping'; }
         static get properties() {
             return {
-                posts: Array,
-                camping: Object
+                newCampingObj: {
+                    type: Object,
+                    value: {}
+                  },
                 }
             }
-            handlePosts(e,request){
-                console.log(request.response);
-                
+            _setReqBody() {
+                this.$.createCampingAjx.body = this.newCampingObj;
+            }
+            createCampimg(){
+                console.log("funcion getPosts" + this.newCampingObj.nombre);    
+                var newCampingObj = {
+                    name: this.newCampingObj.nombre,
+                    price: this.newCampingObj.price,
+                    image: this.newCampingObj.image,
+                    description: this.newCampingObj.description,
+                    author: "Anónimo"
+                };
+                this._setReqBody();
+                this.$.createCampingAjx.generateRequest();
+            }
+            handleUserResponse(event) {
+                console.log("Camping creado!")
+                // var response = JSON.parse(event.detail.response);
+                // console.log("crear camping= " + response);
+            }
+            handleUserError(event) {
+                this.error = event.detail.request.xhr.response;
+                console.log(this.error);
             }
         }
 

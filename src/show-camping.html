@@ -7,6 +7,7 @@
 <link rel="import" href="all-campings.html"> 
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="register-login.html">
+<link rel="import" href="delete-camping.html">
 
 <dom-module id="show-camping">
     <template>
@@ -38,17 +39,6 @@
         <iron-localstorage name="id_camping" value="{{id_camping}}"></iron-localstorage> 
         <iron-localstorage name="urlCamping" value="{{urlCamping}}"></iron-localstorage>
         <app-data key="camping" data="{{camping}}"></app-data>
-        <!-- <iron-ajax
-            auto
-            id="oneCampingAjax"
-            url=[[urlCamping]]
-            params='{"apiKey":"qpnQ2vCoFR8HMb_cf0vFfyP0B99yUKGL"}'
-            handle-as="json"
-            loading="Getting..."
-            method="GET"
-            content-type="application/json"
-            on-response="handlePosts">
-        </iron-ajax> -->
         <h1>[[camping.name]]</h1>          
         
         <div class="container">
@@ -67,6 +57,14 @@
                         <div class="caption-full">
                             <h4><a>[[camping.name]]</a></h4>
                             <p>[[camping.description]]</p>
+                            <!-- //si tiene permiso -->
+                            <a class="btn btn-xs btn-warning" href="#">Edit</a>
+                            <!-- <form class="delete-form" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST"> -->
+                            <button class="btn btn-xs btn-danger">Delete</button>
+                            <delete-camping camping={{camping}}></delete-camping>
+                            <!-- </form> -->
+                            <!-- //si tiene permiso -->
+
                             <p>
                                 <em>Submitted by: </em>
                             </p>
