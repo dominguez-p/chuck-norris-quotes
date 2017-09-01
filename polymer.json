@@ -7,7 +7,8 @@
     "src/secret-quotes.html",
     "src/not-found.html",
     "src/all-campings.html",
-    "src/show-camping.html"
+    "src/show-camping.html",
+    "src/new-camping.html"
   ],
   "sources": [
     "src/**/*",

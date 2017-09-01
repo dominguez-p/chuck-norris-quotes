@@ -2,11 +2,12 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
 <link rel="import" href="register-login.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="app-data.html">
 <link rel="import" href="show-camping.html">
-
+<link rel="import" href="new-camping.html">
 
 <dom-module id="all-campings">
     <template>
@@ -55,7 +56,7 @@
                     <h1>Welcome to YelpCamp!</h1>  
                     <p>View our hand-picked campgrounds from all over the world</p>
                     <p>
-                        <a class="btn btn-primary btn-lg" href="#">Add New Campground</a></a>
+                        <a class="btn btn-primary btn-lg" href="/new-camping">Add New Campground</a></a>
                     </p>
                 </div>
             </header>
@@ -118,37 +119,11 @@
                     image: event.target.dataset.image,
                     description: event.target.dataset.description
                 }
-
-
-
-                // this.$.allCampingsAjax.url += "/" + item
-                // this.$.allCampingsAjax.generateRequest();;
-                this.id_camping = event.target.dataset._id;
-               // this.urlCamping = this.$.allCampingsAjax.url + "/" + item + "?apiKey=qpnQ2vCoFR8HMb_cf0vFfyP0B99yUKGL"
-                //console.log(this.urlCamping);
-                // this.name = request.response.name;
-                // this.image = request.response.image;
-                // this.description = request.response.description;
-                // {"_id":{"$oid":"599ab92ef3a8013716dfb087"},"name":"Rodeo Camp","price":"12.00","image":"https://farm6.staticflickr.com/5181/5641024448_04fefbb64d.jpg","description":"A lot of horses!!","comments":[{"$oid":"599abb0e1da301001101f41b"},{"$oid":"599ac830992676001125783d"}],"author":{"id":{"$oid":"599ab8fff3a8013716dfb086"},"username":"pablo"},"__v":2}                
-                
             }
-            // getPost() {
-            //     this.$.allCampingsAjax.url += item
-            //     this.$.allCampingsAjax.generateRequest();
-            // }
-            // getPost() {
-            //     console.log("funcion getPost");
-            //     // this.$.allCampingsAjax.url += '/599ab92ef3a8013716dfb087'
-            //     this.$.allCampingsAjax.generateRequest();
-            //     this.name = request.response.name;
-            //     this.image = request.response.image;
-            //     this.description = request.response.description;
-            //   }
             handlePosts(e,request){
                 console.log(request.response);
                 this.set('posts',request.response)
             }
-
         }          
         window.customElements.define(MyView4.is, MyView4);
     </script>
