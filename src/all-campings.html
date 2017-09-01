@@ -5,6 +5,7 @@
 <link rel="import" href="register-login.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="app-data.html">
+<link rel="import" href="show-camping.html">
 
 
 <dom-module id="all-campings">
@@ -70,14 +71,16 @@
                         <div class="caption">
                             <h4>[[item.description]]</h4>
                             <h4>[[item._id.$oid]]</h4>
+                            
                         </div>
                         <p>
-                            <a on-click="seleccionado" data-item$="[[item._id.$oid]]" class="btn btn-primary" href="/show-camping">More Info</a>                            
+                            <a on-click="seleccionado" data-item$="[[item._id.$oid]]" data-name$="[[item.name]]"
+                             data-description$="[[item.description]]"
+                             data-image$="[[item.image]]" class="btn btn-primary" href="/show-camping">More Info</a>                            
                         </p>                
                     </div>                            
                 </template>
              </div>
-            
         </div>
             
         <div class="row">
@@ -85,6 +88,10 @@
                 <h3>Our Most Popular Campgrounds!</h3>
             </div>
         </div>
+
+        <app-data key="camping" data="{{camping}}"></app-data>
+
+
     </template>
       
     <script>
@@ -92,7 +99,8 @@
         static get is() { return 'all-campings'; }
         static get properties() {
             return {
-                posts: Array
+                posts: Array,
+                camping: Object
                 }
             }
             getPosts(){   
@@ -100,12 +108,29 @@
                 this.$.allCampingsAjax.generateRequest();
             }
             seleccionado(event) {
-                var item = event.target.dataset.item;
+                var name =  event.target.dataset.name;
+                console.log(name);
+                console.log();
+                //guardar en app-data los datos para mostrar en show-camping
+                this.camping = {
+                    id: event.target.dataset.item,
+                    name: event.target.dataset.name,
+                    image: event.target.dataset.image,
+                    description: event.target.dataset.description
+                }
+
+
+
                 // this.$.allCampingsAjax.url += "/" + item
-                // this.$.allCampingsAjax.generateRequest();
-                this.id_camping = item;
-                this.urlCamping = this.$.allCampingsAjax.url + "/" + item
-                console.log(this.urlCamping);
+                // this.$.allCampingsAjax.generateRequest();;
+                this.id_camping = event.target.dataset._id;
+               // this.urlCamping = this.$.allCampingsAjax.url + "/" + item + "?apiKey=qpnQ2vCoFR8HMb_cf0vFfyP0B99yUKGL"
+                //console.log(this.urlCamping);
+                // this.name = request.response.name;
+                // this.image = request.response.image;
+                // this.description = request.response.description;
+                // {"_id":{"$oid":"599ab92ef3a8013716dfb087"},"name":"Rodeo Camp","price":"12.00","image":"https://farm6.staticflickr.com/5181/5641024448_04fefbb64d.jpg","description":"A lot of horses!!","comments":[{"$oid":"599abb0e1da301001101f41b"},{"$oid":"599ac830992676001125783d"}],"author":{"id":{"$oid":"599ab8fff3a8013716dfb086"},"username":"pablo"},"__v":2}                
+                
             }
             // getPost() {
             //     this.$.allCampingsAjax.url += item

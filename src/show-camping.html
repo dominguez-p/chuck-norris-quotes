@@ -37,7 +37,8 @@
         </style>
         <iron-localstorage name="id_camping" value="{{id_camping}}"></iron-localstorage> 
         <iron-localstorage name="urlCamping" value="{{urlCamping}}"></iron-localstorage>
-        <iron-ajax
+        <app-data key="camping" data="{{camping}}"></app-data>
+        <!-- <iron-ajax
             auto
             id="oneCampingAjax"
             url=[[urlCamping]]
@@ -47,9 +48,8 @@
             method="GET"
             content-type="application/json"
             on-response="handlePosts">
-        </iron-ajax>
-        <button type="button" name="posts2" on-click="getPost">Get one Posts</button>
-        <h1>[[name]]</h1>          
+        </iron-ajax> -->
+        <h1>[[camping.name]]</h1>          
         
         <div class="container">
             <div class="row">
@@ -63,10 +63,10 @@
                 </div>
                 <div class="col-md-9">
                     <div class="thumbnail">
-                        <img class="image-responsive" src="[[image]]">
+                        <img class="image-responsive" src="[[camping.image]]">
                         <div class="caption-full">
-                            <h4><a>[[name]]</a></h4>
-                            <p>[[description]]</p>
+                            <h4><a>[[camping.name]]</a></h4>
+                            <p>[[camping.description]]</p>
                             <p>
                                 <em>Submitted by: </em>
                             </p>
@@ -100,13 +100,13 @@
         //     // this.$.oneCampingAjax.generateRequest();
             
         // }
-        handlePosts(e,request){
-            console.log(request.response);
-            this.set('camping',request.response);           
-            this.name = request.response.name;
-            this.image = request.response.image;
-            this.description = request.response.description;                      
-        }
+        // handlePosts(e,request){
+        //     console.log(request.response);
+        //     this.set('camping',request.response);           
+        //     // this.name = request.response.name;
+        //     // this.image = request.response.image;
+        //     // this.description = request.response.description;                      
+        // }
         }          
         window.customElements.define(MyView5.is, MyView5);
     </script>
