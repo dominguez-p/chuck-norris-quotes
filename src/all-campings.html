@@ -33,6 +33,10 @@
             .delete-form {
                 display: inline;
             }
+            .alert-success {
+                background: green;
+                color: white;
+            }
 
 
         </style>
@@ -47,9 +51,14 @@
             content-type="application/json"
             on-response="handlePosts">
         </iron-ajax>
+        <app-data key="camping" data="{{camping}}"></app-data>
+        <app-data key="message" data="{{message}}"></app-data>
         <iron-localstorage name="id_camping" value="{{id_camping}}"></iron-localstorage>
-        <iron-localstorage name="urlCamping" value="{{urlCamping}}"></iron-localstorage>
+        <iron-localstorage name="message" value="{{message}}"></iron-localstorage>
         <!-- <button type="button" name="posts" on-click="getPost">Get one Posts</button> -->
+        <template is="dom-if" if="[[message.typeMsg]]='Success'">
+            <p class="alert-success"><strong>Info:</strong>[[message.textMsg]]</p>
+        </template>
         <div class="container">
             <header class="card">
                 <div class="container">
@@ -57,6 +66,7 @@
                     <p>View our hand-picked campgrounds from all over the world</p>
                     <p>
                         <a class="btn btn-primary btn-lg" href="/new-camping">Add New Campground</a></a>
+                        <a on-click="getPosts" class="btn btn-primary btn-lg" href="/all-campings">Refresh</a></a>
                     </p>
                 </div>
             </header>
@@ -89,8 +99,6 @@
             </div>
         </div>
 
-        <app-data key="camping" data="{{camping}}"></app-data>
-
 
     </template>
       
@@ -100,13 +108,18 @@
         static get properties() {
             return {
                 posts: Array,
-                camping: Object
+                camping: Object,
+                message: {
+                    type:String,
+                    value: "aquí el error"
+                    }
                 }
             }
             getPosts(){   
                 console.log("funcion getPosts");       
                 this.$.allCampingsAjax.generateRequest();
             }
+            
             seleccionado(event) {
                 var name =  event.target.dataset.name;
                 console.log(name);
@@ -121,7 +134,8 @@
             }
             handlePosts(e,request){
                 console.log(request.response);
-                this.set('posts',request.response)
+                this.set('posts',request.response);
+                this.message = null;
             }
         }          
         window.customElements.define(MyView4.is, MyView4);

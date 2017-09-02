@@ -1,12 +1,27 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
 <link rel="import" href="all-campings.html"> 
+<link rel="import" href="app-data.html">
 
 <dom-module id="new-camping">
     <template>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <style>
-
+            .form-camping {
+                background-color: #fff;
+                color: #555;
+                font-size: 14px;
+                padding: 6px 12px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                width: 100%;
+            }
+            #textareaForm {
+                background: white;
+                max-height: 100px;
+                width: 100%;
+            }
         </style>
         <iron-ajax
             id="createCampingAjx"
@@ -18,14 +33,14 @@
             on-response="handleUserResponse"
             on-error="handleUserError">
         </iron-ajax>
-
+        <app-data key="message" data="{{message}}"></app-data>
         <div class="row">
                 <h1 style="text-align: center">Create a new campground</h1>
                 <div style="width: 30%; margin: 25px auto">
                     <!-- <form action="/campgrounds" method="POST"> -->
                         <div class="form-group">
-                            <iron-input bind-value="{{newCampingObj.nombre}}">
-                                <input class="form-control" type="text" name="name" placeholder="name">
+                            <iron-input bind-value="{{newCampingObj.name}}">
+                                <input class="form-camping" type="text" name="name" placeholder="name">
                             </iron-input>
                         </div>
                         <div class="form-group">
@@ -38,20 +53,21 @@
                                 <input class="form-control" type="text" name="image" placeholder="image url">    
                             </iron-input>
                         </div>
-                        <div class="form-group">
-                            <iron-input bind-value="{{newCampingObj.description}}">
+                        <div class="form-group"> 
+                            <!-- <iron-input bind-value="{{newCampingObj.description}}">
                                 <input class="form-control" name="description" placeholder="description"></input>    
-                            </iron-input>
+                            </iron-input> -->
+                            <iron-autogrow-textarea id="textareaForm" bind-value="{{newCampingObj.description}}" rows="4" placeholder="Description"></iron-autogrow-textarea>
                         </div>                
                         <div class="form-group">
-                            <button on-click="createCampimg" class="btn btn-lg btn-control btn-block btn-primary">Submit!</button>    
+                            <a href="/all-campings" on-click="createCampimg" class="btn btn-lg btn-control btn-primary">Submit!</a>    
                         </div>
                     <!-- </form> -->
                     <a href="/all-campings">Go Back</a>              
                 </div>
             </div>
     </template>
-
+    <!-- <app-data key="message" data="{{message}}"></app-data> -->
     <script>
         class MyView6 extends Polymer.Element {
         static get is() { return 'new-camping'; }
@@ -60,16 +76,21 @@
                 newCampingObj: {
                     type: Object,
                     value: {}
-                  },
+                    },
+                message: {
+                    type: Object,
+                    typeMsg: String,
+                    textMsg: String
+                    }
                 }
             }
             _setReqBody() {
                 this.$.createCampingAjx.body = this.newCampingObj;
             }
             createCampimg(){
-                console.log("funcion getPosts" + this.newCampingObj.nombre);    
+                console.log("funcion createCampimg " + this.newCampingObj.nombre);    
                 var newCampingObj = {
-                    name: this.newCampingObj.nombre,
+                    name: this.newCampingObj.name,
                     price: this.newCampingObj.price,
                     image: this.newCampingObj.image,
                     description: this.newCampingObj.description,
@@ -80,6 +101,11 @@
             }
             handleUserResponse(event) {
                 console.log("Camping creado!")
+                var message = {
+                    typeMsg: "Success",
+                    textMsg: "Camping creado!"
+                }
+                this.message = message;
                 // var response = JSON.parse(event.detail.response);
                 // console.log("crear camping= " + response);
             }
