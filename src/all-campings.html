@@ -37,6 +37,10 @@
                 background: green;
                 color: white;
             }
+            .alert-error {
+                background: red;
+                color: white;
+            }
 
 
         </style>
@@ -56,11 +60,15 @@
         <iron-localstorage name="id_camping" value="{{id_camping}}"></iron-localstorage>
         <iron-localstorage name="message" value="{{message}}"></iron-localstorage>
         <!-- <button type="button" name="posts" on-click="getPost">Get one Posts</button> -->
-        <template is="dom-if" if="[[message.typeMsg]]='Success'">
-            <p class="alert-success"><strong>Info:</strong>[[message.textMsg]]</p>
+       <template is="dom-if" if="[[message.showMsg]]">  <!-- si es un error -->
+            <p class="alert-error"><strong>Info:</strong>[[message.textMsg]]</p>
         </template>
+        <!-- <template is="dom-if" if="[[!message.typeMsgError]]"> 
+            <p class="alert-success"><strong>Info:</strong>[[message.textMsg]]</p>
+        </template> -->
         <div class="container">
             <header class="card">
+                <a name="errorSection" /> 
                 <div class="container">
                     <h1>Welcome to YelpCamp!</h1>  
                     <p>View our hand-picked campgrounds from all over the world</p>
@@ -109,10 +117,7 @@
             return {
                 posts: Array,
                 camping: Object,
-                message: {
-                    type:String,
-                    value: "aquí el error"
-                    }
+                message: Object
                 }
             }
             getPosts(){   

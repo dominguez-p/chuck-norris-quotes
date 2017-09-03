@@ -79,7 +79,10 @@
                     },
                 message: {
                     type: Object,
-                    typeMsg: String,
+                    showMsg: {
+                        type: Boolean,
+                        value: false
+                    },
                     textMsg: String
                     }
                 }
@@ -102,7 +105,7 @@
             handleUserResponse(event) {
                 console.log("Camping creado!")
                 var message = {
-                    typeMsg: "Success",
+                    showMsg: true,
                     textMsg: "Camping creado!"
                 }
                 this.message = message;

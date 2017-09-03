@@ -35,7 +35,7 @@
         </iron-ajax>
         
         <app-data key="camping" data="{{camping}}"></app-data>
-        <a class="btn btn-xs btn-danger" raised on-tap="delete" href="all-campings">Delete</a>
+        <a class="btn btn-xs btn-danger" raised on-tap="delete" href="all-campings#errorSection">Delete</a>
         <!-- <template is="dom-if" if="{{!link}}">
             <paper-button raised on-tap="logout">Log Out</paper-button>
         </template>
@@ -43,6 +43,7 @@
         <template is="dom-if" if="{{link}}">
             <a on-tap="logout" href>Log Out</a>
         </template> -->
+        <app-data key="message" data="{{message}}"></app-data>
     </template>
 
     <script>
@@ -60,14 +61,15 @@
                     this.$.deleteCampingAjx.url += "/" + id;
                     this.$.deleteCampingAjx.generateRequest();
                     console.log("camping borrado!!");
+                    var message = {
+                        showMsg: true,
+                        textMsg: "Camping eliminado!"
+                    }
+                    this.message = message;
                 },
                 handleUserResponse: function() {
                     // this.set('route.path', '/all-campings');
-                    var message = {
-                    typeMsg: "Success",
-                    textMsg: "Camping eliminado!"
-                }
-                this.message = message;
+
                 }
                     
                 
