@@ -7,21 +7,9 @@
     <template>
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <style>
-            /* :host {
-                margin: 0;
-                padding: 0;
+            .delete-form {
+                display: inline;
             }
-            paper-button {
-                background: #f44336;
-                color: #fff;
-                font-weight: bold;
-            }
-            a {
-                color: #fff;
-                display: inline-block;
-                font-size: 20px;
-            } */
-
         </style>
         <iron-ajax
             id="deleteCampingAjx"
@@ -35,14 +23,7 @@
         </iron-ajax>
         
         <app-data key="camping" data="{{camping}}"></app-data>
-        <a class="btn btn-xs btn-danger" raised on-tap="delete" href="all-campings#errorSection">Delete</a>
-        <!-- <template is="dom-if" if="{{!link}}">
-            <paper-button raised on-tap="logout">Log Out</paper-button>
-        </template>
-
-        <template is="dom-if" if="{{link}}">
-            <a on-tap="logout" href>Log Out</a>
-        </template> -->
+        <a class="btn btn-xs btn-danger delete-form" raised on-tap="delete" href="all-campings#errorSection">Delete</a>
         <app-data key="message" data="{{message}}"></app-data>
     </template>
 
@@ -58,20 +39,28 @@
                     // this.storedUser = null;
                     var id = this.camping.id;
                     console.log("id a borrar: " + id);
-                    this.$.deleteCampingAjx.url += "/" + id;
+                    this.$.deleteCampingAjx.url = "https://api.mlab.com/api/1/databases/yelpcamp2017/collections/campgrounds/" + id;
                     this.$.deleteCampingAjx.generateRequest();
                     console.log("camping borrado!!");
                     var message = {
                         showMsg: true,
+                        errorMsg: false,
                         textMsg: "Camping eliminado!"
                     }
                     this.message = message;
                 },
-                handleUserResponse: function() {
+                handleUserError: function() {
+                    var message = {
+                        showMsg: true,
+                        errorMsg: true,
+                        textMsg: "Oooops, something wrong!"
+                    }
                     // this.set('route.path', '/all-campings');
 
-                }
-                    
+                },
+                handleUserResponse: function() {
+
+                }                    
                 
             });
         }());

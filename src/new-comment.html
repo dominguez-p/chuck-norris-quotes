@@ -1,0 +1,88 @@
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="app-data.html">
+<link rel="import" href="all-campings.html"> 
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="register-login.html">
+<link rel="import" href="delete-camping.html">
+
+<dom-module id="new-comment">
+    <template>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <style>
+            .edit-form {
+                display: inline;
+            }
+        </style>
+            <iron-ajax
+            id="newCommentAjax"
+            method="PUT"
+            content-type="application/json"
+            handle-as="text"
+            on-response="handleUserResponse"
+            on-error="handleUserError">
+          </iron-ajax>
+        <app-data key="camping" data="{{camping}}"></app-data>       
+        <h1>new comment form [[camping.name]]</h1>  
+        <!-- <h4><a>[[camping.name]]</a></h4>
+        <p>[[camping.description]]</p> --> 
+        <p>[[camping.id]]</p>
+        <p>[[camping._id.$oid]]</p>
+        <div class="form-group"> 
+             <iron-autogrow-textarea id="textareaForm" bind-value="{{comment.texto}}" rows="4" placeholder="Description"></iron-autogrow-textarea> 
+        </div>  
+        <a href="/show-camping" on-click="newComment" class="btn btn-lg btn-control btn-primary">Submit!</a>
+    </template>
+      
+    <script>
+        class MyView8 extends Polymer.Element {
+        static get is() { return 'new-comment'; }
+        static get properties() {
+            return {
+                camping: Object,
+                comment: Object
+                }
+            }
+            _setReqBody() {
+                this.$.newCommentAjax.body = this.camping;
+            }
+            newComment() {
+                var comment = {
+                    id: "qp9iq30594203458",
+                    text: "bla bla blah",
+                    author: "anónimo"
+                };
+                this.camping.comments.push(comment);
+                console.log("nuevo comentario incluido: ")
+                console.log(this.camping.comments);
+                // this.$.newCommentAjax.url = "https://api.mlab.com/api/1/databases/yelpcamp2017/collections/campgrounds/599ab92ef3a8013716dfb087" ;
+                // this.$.newCommentAjax.method = "PUT"
+                // this.$.newCommentAjax.generateRequest();  
+                var camping = {
+                    // name: this.camping.name,
+                    // price: this.camping.price,
+                    // image: this.camping.image,
+                    // description: this.camping.description,
+                    // author: "Anónimo",
+                    comments: this.camping.comments
+                };
+                this._setReqBody();
+                this.$.newCommentAjax.method = "PUT"
+                this.$.newCommentAjax.url = "https://api.mlab.com/api/1/databases/yelpcamp2017/collections/campgrounds/" + this.camping.id;
+                this.$.newCommentAjax.generateRequest();
+            }
+            handleUserError(event){
+                var message = {
+                    showMsg: true,
+                    errorMsg: false,
+                    textMsg: event.detail.request.xhr.response
+                }
+                this.message = message;
+            }
+        }          
+        window.customElements.define(MyView8.is, MyView8);
+    </script>
+</dom-module>

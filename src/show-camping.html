@@ -8,6 +8,9 @@
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="register-login.html">
 <link rel="import" href="delete-camping.html">
+<link rel="import" href="edit-camping.html">
+<link rel="import" href="all-comments.html">
+<link rel="import" href="new-comment.html">
 
 <dom-module id="show-camping">
     <template>
@@ -30,7 +33,7 @@
                 padding: 9px;
             }
 
-            .delete-form {
+            .edit-delete-form {
                 display: inline;
             }
 
@@ -39,6 +42,7 @@
         <iron-localstorage name="id_camping" value="{{id_camping}}"></iron-localstorage> 
         <iron-localstorage name="message" value="{{message}}"></iron-localstorage>
         <app-data key="camping" data="{{camping}}"></app-data>
+        <app-data key="userData" data="{{storedUser}}"></app-data>
         <h1>[[camping.name]]</h1>          
         
         <div class="container">
@@ -55,23 +59,37 @@
                     <div class="thumbnail">
                         <img class="image-responsive" src="[[camping.image]]">
                         <div class="caption-full">
+                            <h4 class="pull-right">€[[camping.price]]/night</h4>
                             <h4><a>[[camping.name]]</a></h4>
                             <p>[[camping.description]]</p>
+                            <p>[[camping.id]]</p>
                             <!-- //si tiene permiso -->
-                            <a class="btn btn-xs btn-warning" href="#">Edit</a>
+                            <!-- <a class="btn btn-xs btn-warning" href="#">Edit</a> -->
                             <!-- <form class="delete-form" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST"> -->
-                            <button class="btn btn-xs btn-danger">Delete</button>
-                            <delete-camping camping={{camping}}></delete-camping>
+                            <!-- <button class="btn btn-xs btn-danger">Delete</button> -->
+                            <div class="edit-delete-form"  hidden$="[[!storedUser.loggedin]]">
+                                <edit-camping></edit-camping>
+                                <delete-camping></delete-camping>
+                            </div>
+                            <div class="text-right">
+                                <a class="btn btn-success" href="/new-comment">Add new comment</a>
+                            </div>
                             <!-- </form> -->
                             <!-- //si tiene permiso -->
-
                             <p>
                                 <em>Submitted by: </em>
                             </p>
 
                         </div>
+                        <div>
+                            <all-comments></all-comments>
+                        </div>
                     </div>
+                    
                 </div>
+
+
+
             </div>
         </div>
         <a href="/all-campings">Volver</a>
@@ -83,9 +101,9 @@
         static get is() { return 'show-camping'; }
         static get properties() {
             return {
-            campìng: Object
-            }
-        }
+                camping: Object
+                }
+            }  
         }          
         window.customElements.define(MyView5.is, MyView5);
     </script>

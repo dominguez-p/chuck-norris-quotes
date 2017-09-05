@@ -50,7 +50,6 @@
             url='https://api.mlab.com/api/1/databases/yelpcamp2017/collections/campgrounds'
             params='{"apiKey":"qpnQ2vCoFR8HMb_cf0vFfyP0B99yUKGL"}'
             handle-as="json"
-            loading="Getting..."
             method="GET"
             content-type="application/json"
             on-response="handlePosts">
@@ -61,11 +60,10 @@
         <iron-localstorage name="message" value="{{message}}"></iron-localstorage>
         <!-- <button type="button" name="posts" on-click="getPost">Get one Posts</button> -->
        <template is="dom-if" if="[[message.showMsg]]">  <!-- si es un error -->
-            <p class="alert-error"><strong>Info:</strong>[[message.textMsg]]</p>
+            <p hidden$="[[message.errorMsg]]" class="alert alert-success" role="alert"><strong>Info:</strong>[[message.textMsg]]</p>
+            <p hidden$="[[!message.errorMsg]]" class="alert alert-danger" role="alert" role="alert"><strong>Info:</strong>[[message.textMsg]]</p>
         </template>
-        <!-- <template is="dom-if" if="[[!message.typeMsgError]]"> 
-            <p class="alert-success"><strong>Info:</strong>[[message.textMsg]]</p>
-        </template> -->
+
         <div class="container">
             <header class="card">
                 <a name="errorSection" /> 
@@ -73,8 +71,8 @@
                     <h1>Welcome to YelpCamp!</h1>  
                     <p>View our hand-picked campgrounds from all over the world</p>
                     <p>
-                        <a class="btn btn-primary btn-lg" href="/new-camping">Add New Campground</a></a>
-                        <a on-click="getPosts" class="btn btn-primary btn-lg" href="/all-campings">Refresh</a></a>
+                        <a class="btn btn-primary btn-lg" href="/new-camping" on-click="resetCamping">Add New Campground</a></a>
+                        <a class="btn btn-primary btn-lg" on-click="getPosts" href="/all-campings">Refresh</a></a>
                     </p>
                 </div>
             </header>
@@ -89,12 +87,14 @@
                         <h1>[[item.name]]</h1>
                         <div class="caption">
                             <h4>[[item.description]]</h4>
-                            
                         </div>
                         <p>
-                            <a on-click="seleccionado" data-item$="[[item._id.$oid]]" data-name$="[[item.name]]"
+                            <a on-click="seleccionado" data-item$="[[item._id.$oid]]"
+                             data-name$="[[item.name]]" data-price$="[[item.price]]"
                              data-description$="[[item.description]]"
-                             data-image$="[[item.image]]" class="btn btn-primary" href="/show-camping">More Info</a>                            
+                             data-image$="[[item.image]]"
+                             data-comments$="[[item.comments]]" class="btn btn-primary" 
+                             href="/show-camping">More Info</a>                            
                         </p>                
                     </div>                            
                 </template>
@@ -123,77 +123,49 @@
             getPosts(){   
                 console.log("funcion getPosts");       
                 this.$.allCampingsAjax.generateRequest();
+                this.camping = null
             }
             
             seleccionado(event) {
                 var name =  event.target.dataset.name;
+                var comment = event.target.dataset.comments;
                 console.log(name);
-                console.log();
+                console.log(event.target.dataset.comments);
+                if(event.target.dataset.comments == undefined) {
+                    comment = "[]"
+                    console.log("comentarios vacíos");
+                }
+                console.log(event.target.dataset.comments);
                 //guardar en app-data los datos para mostrar en show-camping
                 this.camping = {
                     id: event.target.dataset.item,
                     name: event.target.dataset.name,
+                    price: event.target.dataset.price,
                     image: event.target.dataset.image,
-                    description: event.target.dataset.description
-                }
+                    description: event.target.dataset.description,
+                    comments: JSON.parse(comment)
+                    }
+                
+                // var comments = JSON.parse(this.camping.comments);
+                // this.set('comments',comments);
+                console.log("seleccionado: " + this.camping.comments);
+
+            }
+            resetCamping() {
+                this.camping = {
+                    id: "",
+                    name: "",
+                    price: "",
+                    image: "",
+                    description: ""
+                };
             }
             handlePosts(e,request){
                 console.log(request.response);
                 this.set('posts',request.response);
-                this.message = null;
+                this.message = null;                
             }
         }          
         window.customElements.define(MyView4.is, MyView4);
     </script>
 </dom-module>
-
-<!-- <link rel="import" href="../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
-<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="shared-styles.html">
-
-<dom-module id="all-campings">
- <template>
-     <style include="shared-styles">
-         :host {
-             font-style: italic;
-             display: inline-block;
-         }
-     </style>
-
-     <button type="button" name="posts" on-click="getPosts">Get All Posts</button>
-
-     <iron-ajax
-       id="allCampingsAjax"
-       url='https://api.mlab.com/api/1/databases/bootcamp/collections/posts'      
-       params='{"apiKey":"qpnQ2vCoFR8HMb_cf0vFfyP0B99yUKGL"}'
-       handle-as="json"
-       loading="Getting..."
-       method="GET"
-       content-type="application/json"
-       on-response="handlePosts"
-     ></iron-ajax>
-
-     <div id="post-list">
-         <template is="dom-repeat" items="[[posts]]">
-           {{item.titulo}}
-           {{item.texto}}
-         </template>
-     </div>
- </template>
- <script>  
-     Polymer ({
-       is: 'all-campings',
-       properties: {
-         posts: Array
-       },
-       getPosts: function (){          
-           this.$.allCampingsAjax.generateRequest();
-       },
-       handlePosts: function (e,request){
-         this.set('posts',request.response)
-         console.log(this.posts);
-       }
-     })
- </script>
-</dom-module> -->
