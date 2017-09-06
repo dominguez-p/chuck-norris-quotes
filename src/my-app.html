@@ -111,7 +111,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-header slot="header" condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-            <div main-title>Chuck Norris</div>
+            <div main-title>Welcome!</div>
             <a name="register-login" href="/register-login" hidden$="[[storedUser.loggedin]]">Log In</a>
             <div hidden$="[[!storedUser.loggedin]]">
                 <span class="greeting">Hi [[storedUser.name]]!</span>
@@ -190,7 +190,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _showPage404() {
         this.page = 'not-found';
       }
-
 
     }
 
