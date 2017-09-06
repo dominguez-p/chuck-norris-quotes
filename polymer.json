@@ -9,7 +9,7 @@
     "src/all-campings.html",
     "src/show-camping.html",
     "src/new-camping.html",
-    "src/all-comment.html"
+    "src/all-comments.html"
   ],
   "sources": [
     "src/**/*",
