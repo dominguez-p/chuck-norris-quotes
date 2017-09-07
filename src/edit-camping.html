@@ -6,8 +6,9 @@
 <link rel="import" href="app-data.html">
 <link rel="import" href="all-campings.html"> 
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
-<link rel="import" href="register-login.html">
-<link rel="import" href="delete-camping.html">
+<!-- <link rel="import" href="register-login.html">
+<link rel="import" href="delete-camping.html"> -->
+<link rel="import" href="new-camping.html">
 
 <dom-module id="edit-camping">
     <template>
@@ -18,7 +19,7 @@
             }
         </style>
         <app-data key="camping" data="{{camping}}"></app-data>         
-        <a class="btn btn-xs btn-warning edit-form" href="/new-camping">Edit</a>
+        <a on-click="editBlog" class="btn btn-xs btn-warning edit-form" href="/new-camping">Edit</a>
     </template>
       
     <script>
@@ -26,8 +27,13 @@
         static get is() { return 'edit-camping'; }
         static get properties() {
             return {
-            camping: Object
+            camping: Object,
+            editBlog: Boolean
             }
+        }
+        editBlog() {
+            this.editBlog = true;
+            console.log("this.editBlog = " + this.editBlog )
         }
         }          
         window.customElements.define(MyView7.is, MyView7);

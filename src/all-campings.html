@@ -56,7 +56,7 @@
         <iron-ajax
             auto
             id="allCampingsAjax"
-            url='https://api.mlab.com/api/1/databases/yelpcamp2017/collections/campgrounds'
+            url ='https://api.mlab.com/api/1/databases/yelpcamp2017/collections/campgrounds'   
             params='{"apiKey":"qpnQ2vCoFR8HMb_cf0vFfyP0B99yUKGL"}'
             handle-as="json"
             method="GET"
@@ -123,20 +123,22 @@
             return {
                 posts: Array,
                 camping: Object,
-                message: Object
+                message: Object,
+                editBlog: Boolean
                 }
             }
             getPosts(){   
-                console.log("funcion getPosts");       
+                console.log("funcion getPosts");    
                 this.$.allCampingsAjax.generateRequest();
                 this.camping = null
             }
             
             seleccionado(event) {
+                console.log("all-campings/seleccionado(event)");
                 var name =  event.target.dataset.name;
                 var comment = event.target.dataset.comments;
-                console.log(name);
-                console.log(event.target.dataset.comments);
+                console.log("name: " + name);
+                console.log("comments: " + event.target.dataset.comments);
                 if(event.target.dataset.comments == undefined) {
                     comment = "[]"
                     console.log("comentarios vacíos");
@@ -144,6 +146,9 @@
                 console.log(event.target.dataset.comments);
                 //guardar en app-data los datos para mostrar en show-camping
                 this.camping = {
+                    // _id: {
+                    //     $oid: event.target.dataset.item
+                    // },
                     id: event.target.dataset.item,
                     name: event.target.dataset.name,
                     price: event.target.dataset.price,
@@ -159,12 +164,14 @@
             }
             resetCamping() {
                 this.camping = {
-                    id: "",
+                    // id: "",
                     name: "",
                     price: "",
                     image: "",
                     description: ""
                 };
+                this.editBlog = false;
+                console.log("this.edigBlog = " + this.editBlog)
             }
             handlePosts(e,request){
                 console.log(request.response);
