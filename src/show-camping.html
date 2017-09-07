@@ -36,13 +36,15 @@
             .edit-delete-form {
                 display: inline;
             }
-
-
+            a {
+                color: white;
+            }
         </style>
         <iron-localstorage name="id_camping" value="{{id_camping}}"></iron-localstorage> 
         <iron-localstorage name="message" value="{{message}}"></iron-localstorage>
         <app-data key="camping" data="{{camping}}"></app-data>
         <app-data key="userData" data="{{storedUser}}"></app-data>
+        <app-data key="grants" data="{{canView}}"></app-data>
         <h1>[[camping.name]]</h1>          
         
         <div class="container">
@@ -62,14 +64,19 @@
                             <h4 class="pull-right">€[[camping.price]]/night</h4>
                             <h4><a>[[camping.name]]</a></h4>
                             <p>[[camping.description]]</p>
-                            <p>[[camping._id.$oid]]</p>
+                            
+                            
                             <!-- //si tiene permiso -->
                             <!-- <a class="btn btn-xs btn-warning" href="#">Edit</a> -->
                             <!-- <form class="delete-form" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST"> -->
                             <!-- <button class="btn btn-xs btn-danger">Delete</button> -->
-                            <div class="edit-delete-form"  hidden$="[[!storedUser.loggedin]]">
-                                <edit-camping></edit-camping>
-                                <delete-camping></delete-camping>
+                            <div class="edit-delete-form">
+                                <div hidden$="[[!canView]]">
+                                    <!-- <p>puede ver</p> -->
+                                    <edit-camping hidden$="[[!storedUser.loggedin]]"></edit-camping>
+                                    <delete-camping hidden$="[[!storedUser.loggedin]]" ></delete-camping>
+                                </div>
+                                <p hidden$="[[canView]]"><em> info: no puede editar ni eliminar este post si no es el propietario</em></p>                                
                             </div>
                             <div class="text-right">
                                 <a class="btn btn-success" href="/new-comment">Add new comment</a>
@@ -77,7 +84,7 @@
                             <!-- </form> -->
                             <!-- //si tiene permiso -->
                             <p>
-                                <em>Submitted by: </em>
+                                <em>Submitted by: [[camping.author]]</em>
                             </p>
 
                         </div>

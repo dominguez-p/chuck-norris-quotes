@@ -9,7 +9,7 @@
 <dom-module id="new-camping">
     <template>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <style>
+        <style include="shared-styles">
             .form-camping {
                 background-color: #fff;
                 color: #555;
@@ -35,11 +35,18 @@
         </iron-ajax>
         <app-data key="message" data="{{message}}"></app-data>
         <app-data key="camping" data="{{camping}}"></app-data>
-        <p>[[editBlog]]</p>
-        <div class="row">
-            <h1 hidden$="[[editBlog]]" style="text-align: center">Create a new campground</h1>
-            <h1 hidden$="[[!editBlog]]" style="text-align: center">Edit campground</h1>
-            <div style="width: 30%; margin: 25px auto">
+        <app-data key="userData" data="{{storedUser}}"></app-data>
+        <app-data key="editBlog" data="{{editBlog}}"></app-data>    
+        <p>loggedin: [[storedUser.loggedin]]</p>
+        <p>editblog: [[editBlog]]</p>
+        <div class="card">
+            <div hidden$="[[storedUser.loggedin]]">
+                <p>You must be <a href="register-login">log in</a></p>
+            </div>
+            <div hidden$="[[!storedUser.loggedin]]">
+                <h1 hidden$="[[editBlog]]" style="text-align: center">Create a new campground</h1>
+                <h1 hidden$="[[!editBlog]]" style="text-align: center">Edit campground</h1>
+                <div style="width: 30%; margin: 25px auto">
                     <div class="form-group">
                         <iron-input bind-value="{{camping.name}}">
                             <input class="form-camping" type="text" name="name" placeholder="name">
@@ -59,16 +66,16 @@
                         <iron-autogrow-textarea id="textareaForm" bind-value="{{camping.description}}" rows="4" placeholder="Description"></iron-autogrow-textarea>
                     </div>                
                     <div class="form-group">
-                        <div hidden$="[[editBlog]]">
+                        <div hidden$="[[editBlog]]" >
                             <a href="/all-campings" on-click="createCampimg" class="btn btn-lg btn-control btn-primary">Create!</a>    
-                        <div>
+                        </div>
                         <div hidden$="[[!editBlog]]">
                             <a href="/all-campings" on-click="editCamping" class="btn btn-lg btn-control btn-primary">Edit!</a>    
-                        </div>
-                        
+                        </div>                        
                     </div>
-                <a href="/all-campings">Go Back</a>              
-            </div>
+                </div>                 
+            </div>    
+            <a href="/all-campings">Go Back</a>         
         </div>
     </template>
     <script>
@@ -105,8 +112,9 @@
                     price: this.camping.price,
                     image: this.camping.image,
                     description: this.camping.description,
-                    author: "Anónimo"
+                    author: this.storedUser.name
                 };
+                this.camping = camping;
                 console.log("funcion createCampimg " + this.camping.name);
                 this.$.createCampingAjx.method = "POST"
                 this.$.createCampingAjx.url = "https://api.mlab.com/api/1/databases/yelpcamp2017/collections/campgrounds"

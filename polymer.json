@@ -4,7 +4,6 @@
   "fragments": [
     "src/home-page.html",
     "src/register-login.html",
-    "src/secret-quotes.html",
     "src/not-found.html",
     "src/all-campings.html",
     "src/show-camping.html",

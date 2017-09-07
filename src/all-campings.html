@@ -12,14 +12,7 @@
 <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
 <dom-module id="all-campings">
     <template>
-        <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-        <!-- Optional theme -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-        <!-- Latest compiled and minified JavaScript -->
-
         <style include="shared-styles">
             
             :host {
@@ -65,8 +58,13 @@
         </iron-ajax>
         <app-data key="camping" data="{{camping}}"></app-data>
         <app-data key="message" data="{{message}}"></app-data>
-        <iron-localstorage name="id_camping" value="{{id_camping}}"></iron-localstorage>
-        <iron-localstorage name="message" value="{{message}}"></iron-localstorage>
+        <app-data key="userData" data="{{storedUser}}"></app-data>
+        <app-data key="editBlog" data="{{editBlog}}"></app-data>
+        <app-data key="grants" data="{{canView}}"></app-data>
+        
+        
+        <!-- <iron-localstorage name="id_camping" value="{{id_camping}}"></iron-localstorage>
+        <iron-localstorage name="message" value="{{message}}"></iron-localstorage> -->
         <!-- <button type="button" name="posts" on-click="getPost">Get one Posts</button> -->
        <template is="dom-if" if="[[message.showMsg]]">  <!-- si es un error -->
             <p hidden$="[[message.errorMsg]]" class="alert alert-success" role="alert"><strong>Info:</strong>[[message.textMsg]]</p>
@@ -101,7 +99,8 @@
                              data-name$="[[item.name]]" data-price$="[[item.price]]"
                              data-description$="[[item.description]]"
                              data-image$="[[item.image]]"
-                             data-comments$="[[item.comments]]" class="btn btn-primary" 
+                             data-comments$="[[item.comments]]"
+                             data-author$="[[item.author]]" class="btn btn-primary" 
                              href="/show-camping">More Info</a>                            
                         </p>                
                     </div>                            
@@ -124,7 +123,9 @@
                 posts: Array,
                 camping: Object,
                 message: Object,
-                editBlog: Boolean
+                editBlog: Boolean,
+                storedUser: Object,
+                canView: Object
                 }
             }
             getPosts(){   
@@ -143,7 +144,8 @@
                     comment = "[]"
                     console.log("comentarios vacíos");
                 }
-                console.log(event.target.dataset.comments);
+                console.log("author: " + event.target.dataset.author);
+                
                 //guardar en app-data los datos para mostrar en show-camping
                 this.camping = {
                     // _id: {
@@ -154,8 +156,18 @@
                     price: event.target.dataset.price,
                     image: event.target.dataset.image,
                     description: event.target.dataset.description,
+                    author: event.target.dataset.author,
                     comments: JSON.parse(comment)
                     }
+                //controlo que el usuario logado pueda editar sólo sus comentarios
+                
+                if (event.target.dataset.author == this.storedUser.name) {
+                    console.log("puede ver!!")
+                    this.canView = true;
+                } else {
+                    this.canView = false;
+                    console.log("NO puede ver!!")
+                }
                 
                 // var comments = JSON.parse(this.camping.comments);
                 // this.set('comments',comments);
@@ -168,10 +180,17 @@
                     name: "",
                     price: "",
                     image: "",
-                    description: ""
+                    description: ""            
                 };
+                console.log(this.storedUser);
+                if(this.storedUser == ""){
+                    this.storedUser = {
+                    loggedin: false
+                    };
+                    console.log("user: " + this.storedUser.loggedin);
+                }
                 this.editBlog = false;
-                console.log("this.edigBlog = " + this.editBlog)
+                console.log("this.editBlog = " + this.editBlog)
             }
             handlePosts(e,request){
                 console.log(request.response);
