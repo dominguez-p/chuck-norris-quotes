@@ -60,6 +60,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <p class="alert-error"><strong>Error:</strong> [[error]]</p>
     </template>
     <div class="card">
+      <p>[[signup]]</p>
       <div id="unauthenticated" hidden$="[[storedUser.loggedin]]">
           <div class="row">
             <div style="width: 30%; margin: 25px auto">          
@@ -150,26 +151,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.signup = false;
       }
       handleUserResponse(event) {
-
+        var success = false;
         var response = JSON.parse(event.detail.response);
-
-        if (response.data.count > 0) {
-            this.error = '';
-            this.storedUser = {
+        if (!this.signup) { //si es login
+          if (response.data.count > 0) {
+            success = true;
+            // redirect to Secret Quotes
+            //this.set('route.path', '/secret-quotes')
+          } else {
+              this.error="Login incorrecto!"
+              // reset form data
+              this.formData = {"nombre":"","password":""};
+              success = false;
+          }
+        } else { //es sign up
+          success = true;
+        }
+        if (success){
+          this.error = '';
+          this.storedUser = {
                 name: this.formData.nombre,
                 id_token: response.id_token,
                 access_token: response.access_token,
                 loggedin: true
-            };
-            // redirect to Secret Quotes
-            //this.set('route.path', '/secret-quotes')
-        } else {
-          this.error="Login incorrecto!"
-          // reset form data
-          this.formData = {"nombre":"","password":""};
+          }
+          this.signup = false;
+          success = false;
         }
-    
-        
       }
       handleUserError(event) {
         this.error = event.detail.request.xhr.response;
