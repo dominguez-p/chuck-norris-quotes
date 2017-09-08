@@ -17,7 +17,7 @@
             }
         </style>
         <iron-ajax id="newCommentAjax" method="POST" params="{&quot;apiKey&quot;:&quot;qpnQ2vCoFR8HMb_cf0vFfyP0B99yUKGL&quot;}" content-type="application/json" handle-as="text" on-response="handleUserResponse" on-error="handleUserError">
-          </iron-ajax>
+        </iron-ajax>
         <app-data key="camping" data="{{camping}}"></app-data> 
         <app-data key="userData" data="{{storedUser}}"></app-data>
         <div class="card">
@@ -54,7 +54,8 @@
                 var comment = {
                     id: this.camping.id,
                     text: this.comment.texto,
-                    author: this.storedUser.name
+                    author: this.storedUser.name,
+                    canView: false
                 };
                 this.comment = comment;
                 console.log("nuevo comentario incluido: ")

@@ -45,7 +45,12 @@
                 },
                 logout: function() {
                     // remove user data
-                    this.storedUser = null;
+                    this.storedUser ={
+                        name: null,
+                        id_token: null,
+                        access_token: null,
+                        loggedin: false
+                };
                 }
             });
         }());

@@ -13,7 +13,6 @@
     <template>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <style include="shared-styles">
-            
             :host {
                 display: block;
                 padding: 10px;
@@ -86,6 +85,9 @@
                             <h4>[[item.description]]</h4>
                         </div>
                         <p>
+                            <em>Submitted by: [[item.author]]</em>
+                        </p>
+                        <p>
                             <a on-click="seleccionado" data-item$="[[item._id.$oid]]" data-name$="[[item.name]]" data-price$="[[item.price]]" data-description$="[[item.description]]" data-image$="[[item.image]]" data-comments$="[[item.comments]]" data-author$="[[item.author]]" class="btn btn-primary" href="/show-camping">More Info</a>                            
                         </p>                
                     </div>                            
@@ -133,9 +135,6 @@
                 
                 //guardar en app-data los datos para mostrar en show-camping
                 this.camping = {
-                    // _id: {
-                    //     $oid: event.target.dataset.item
-                    // },
                     id: event.target.dataset.item,
                     name: event.target.dataset.name,
                     price: event.target.dataset.price,
@@ -145,23 +144,36 @@
                     comments: JSON.parse(comment)
                     }
                 //controlo que el usuario logado pueda editar sólo sus comentarios
-                
-                if (event.target.dataset.author == this.storedUser.name) {
-                    console.log("puede ver!!")
+                console.log("comments: " + this.camping.comments);    
+                if ((this.storedUser.name !== undefined)                    
+                        && (event.target.dataset.author === this.storedUser.name)) {
+                    // console.log("puede ver!!")
                     this.canView = true;
                 } else {
                     this.canView = false;
-                    console.log("NO puede ver!!")
+                    // console.log("NO puede ver!!")
                 }
-                
-                // var comments = JSON.parse(this.camping.comments);
-                // this.set('comments',comments);
-                console.log("seleccionado: " + this.camping.comments);
-
+                //recorro los comentarios y marco los que puede ver el usuario
+                var obj = this.camping.comments                                
+                var author = this.storedUser.name;
+                //si el usuario está logado
+                if (this.storedUser.name !== undefined) {
+                    //por cada comentario
+                    Object.keys(obj).forEach(function(key){
+                        //si coincide el autor del comentario con el usuario logado
+                        if (obj[key].author == author) {
+                            // console.log("puede editar/borrar el comentario")
+                            obj[key].canView = true;                              
+                        } else {
+                            obj[key].canView = false;
+                            // console.log("NO puede editar/borrar el comentario");                            
+                        }
+                        console.log(key, obj[key]);
+                    });                    
+                } 
             }
             resetCamping() {
-                this.camping = {
-                    // id: "",
+                this.camping = {                    
                     name: "",
                     price: "",
                     image: "",

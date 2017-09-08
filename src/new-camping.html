@@ -24,6 +24,7 @@
                 max-height: 100px;
                 width: 100%;
             }
+
         </style>
         <iron-ajax
             id="createCampingAjx"
@@ -37,8 +38,6 @@
         <app-data key="camping" data="{{camping}}"></app-data>
         <app-data key="userData" data="{{storedUser}}"></app-data>
         <app-data key="editBlog" data="{{editBlog}}"></app-data>    
-        <p>loggedin: [[storedUser.loggedin]]</p>
-        <p>editblog: [[editBlog]]</p>
         <div class="card">
             <div hidden$="[[storedUser.loggedin]]">
                 <p>You must be <a href="register-login">log in</a></p>
