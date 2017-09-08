@@ -1,0 +1,152 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+--><link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="shared-styles.html">
+
+
+<dom-module id="home-page">
+  <template>
+      <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript" async></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+      body {
+        background-color: #000;
+      }
+
+      #landing-header {
+        z-index: 1;
+        position: relative;
+        text-align: center;
+        padding-top: 40vh;
+      }
+
+      #landing-header h1 {
+        color: #fff;
+      }
+      .slideshow { 
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 0;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .slideshow li { 
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-size: cover;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        opacity: 0;
+        z-index: 0;
+        animation: imageAnimation 50s linear infinite; 
+      }
+
+      .slideshow li:nth-child(1) { 
+        background-image: url(http://i.imgur.com/K3mPv14.jpg) 
+      }
+      .slideshow li:nth-child(2) { 
+        background-image: url(http://i.imgur.com/SBEmFpv.jpg);
+        animation-delay: 10s; 
+      }
+      .slideshow li:nth-child(3) { 
+        background-image: url(http://i.imgur.com/emvhOnb.jpg);
+        animation-delay: 20s; 
+      }
+      .slideshow li:nth-child(4) { 
+        background-image: url(http://i.imgur.com/2LSMCmJ.jpg);
+        animation-delay: 30s; 
+      }
+      .slideshow li:nth-child(5) { 
+        background-image: url(http://i.imgur.com/TVGe0Ef.jpg);
+        animation-delay: 40s; 
+      }
+
+      @keyframes imageAnimation { 
+        0% { 
+          opacity: 0; 
+          animation-timing-function: ease-in;
+        }
+        10% {
+          opacity: 1;
+          animation-timing-function: ease-out;
+        }
+        20% {
+          opacity: 1
+        }
+        30% {
+          opacity: 0
+        }
+      }
+
+      /* Older browser support - .no-cssanimations class added by modernizr */
+      .no-cssanimations .slideshow li {
+        opacity: 1;
+      }
+      a {
+                color: white;
+      }
+
+    </style>
+    <iron-ajax id="getQuoteAjax" auto="" method="get" handle-as="text" last-response="{{quote}}">
+    </iron-ajax>
+    <!-- <div class="card">
+      <h1>Quotes</h1>
+      <blockquote>[[quote]]</blockquote>
+      <paper-button raised on-tap="getQuote" class="primary">Get a New Quote</paper-button>
+    </div> -->
+
+<!-- **********************************incrustar el proyecto ******************** -->
+
+<div id="landing-header">
+    <h1>Welcome to YelpCamp!</h1>
+   <a href="/all-campings" class="btn btn-lg btn-success">View All Campgrounds</a>
+   </div>
+
+   <ul class="slideshow">
+     <li></li>
+     <li></li>
+     <li></li>
+     <li></li>
+     <li></li>
+   </ul>
+
+
+
+<!-- **************************************************************************** -->
+  </template>
+
+  <script>
+    class MyView1 extends Polymer.Element {
+
+      static get is() { return 'home-page'; }
+      getQuote() {
+        // get a quote from the API
+        this.$.getQuoteAjax.generateRequest();
+    }
+    }
+
+    window.customElements.define(MyView1.is, MyView1);
+  </script>
+</dom-module>

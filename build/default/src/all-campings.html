@@ -1,0 +1,188 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="register-login.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="app-data.html">
+<link rel="import" href="show-camping.html">
+<link rel="import" href="new-camping.html">
+
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
+<dom-module id="all-campings">
+    <template>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <style include="shared-styles">
+            
+            :host {
+                display: block;
+                padding: 10px;
+            }
+            .thumbnail img {
+                width: 100%;
+            }
+
+            .thumbnail {
+                padding: 0;
+            }
+
+            .thumbnail .caption-full {
+                padding: 9px;
+            }
+
+            .delete-form {
+                display: inline;
+            }
+            .alert-success {
+                background: green;
+                color: white;
+            }
+            .alert-error {
+                background: red;
+                color: white;
+            }
+            a {
+                color: white;
+            }
+        </style>
+        <iron-ajax auto="" id="allCampingsAjax" url="https://api.mlab.com/api/1/databases/yelpcamp2017/collections/campgrounds" params="{&quot;apiKey&quot;:&quot;qpnQ2vCoFR8HMb_cf0vFfyP0B99yUKGL&quot;}" handle-as="json" method="GET" content-type="application/json" on-response="handlePosts">
+        </iron-ajax>
+        <app-data key="camping" data="{{camping}}"></app-data>
+        <app-data key="message" data="{{message}}"></app-data>
+        <app-data key="userData" data="{{storedUser}}"></app-data>
+        <app-data key="editBlog" data="{{editBlog}}"></app-data>
+        <app-data key="grants" data="{{canView}}"></app-data>
+        
+        
+        <!-- <iron-localstorage name="id_camping" value="{{id_camping}}"></iron-localstorage>
+        <iron-localstorage name="message" value="{{message}}"></iron-localstorage> -->
+        <!-- <button type="button" name="posts" on-click="getPost">Get one Posts</button> -->
+       <template is="dom-if" if="[[message.showMsg]]">  <!-- si es un error -->
+            <p hidden$="[[message.errorMsg]]" class="alert alert-success" role="alert"><strong>Info:</strong>[[message.textMsg]]</p>
+            <p hidden$="[[!message.errorMsg]]" class="alert alert-danger" role="alert"><strong>Info:</strong>[[message.textMsg]]</p>
+        </template>
+
+        <div class="container">
+            <header class="card">
+                <div class="container">
+                    <h1>Welcome to YelpCamp!</h1>  
+                    <p>View our hand-picked campgrounds from all over the world</p>
+                    <p>
+                        <a class="btn btn-primary btn-lg" href="/new-camping" on-click="resetCamping">Add New Campground</a>
+                        <a class="btn btn-primary btn-lg" on-click="getPosts" href="/all-campings">Refresh</a>
+                    </p>
+                </div>
+            </header>
+            
+            <div class="row text-center" style="display:flex; flex-wrap: wrap;">
+                <template is="dom-repeat" items="[[posts]]"> 
+                    <div class="col-md-3 col-sm-6">
+                       
+                        <div class="thumbnail">
+                            
+                        <img src="[[item.image]]">                            
+                        <h1>[[item.name]]</h1>
+                        <div class="caption">
+                            <h4>[[item.description]]</h4>
+                        </div>
+                        <p>
+                            <a on-click="seleccionado" data-item$="[[item._id.$oid]]" data-name$="[[item.name]]" data-price$="[[item.price]]" data-description$="[[item.description]]" data-image$="[[item.image]]" data-comments$="[[item.comments]]" data-author$="[[item.author]]" class="btn btn-primary" href="/show-camping">More Info</a>                            
+                        </p>                
+                    </div>                            
+                </div></template>
+             </div>
+        </div>
+            
+        <div class="row">
+            <div class="col-lg-12">
+                <h3>Our Most Popular Campgrounds!</h3>
+            </div>
+        </div>
+    </template>
+      
+    <script>
+        class MyView4 extends Polymer.Element {
+        static get is() { return 'all-campings'; }
+        static get properties() {
+            return {
+                posts: Array,
+                camping: Object,
+                message: Object,
+                editBlog: Boolean,
+                storedUser: Object,
+                canView: Object
+                }
+            }
+            getPosts(){   
+                console.log("funcion getPosts");    
+                this.$.allCampingsAjax.generateRequest();
+                this.camping = null
+            }
+            
+            seleccionado(event) {
+                console.log("all-campings/seleccionado(event)");
+                var name =  event.target.dataset.name;
+                var comment = event.target.dataset.comments;
+                console.log("name: " + name);
+                console.log("comments: " + event.target.dataset.comments);
+                if(event.target.dataset.comments == undefined) {
+                    comment = "[]"
+                    console.log("comentarios vacíos");
+                }
+                console.log("author: " + event.target.dataset.author);
+                
+                //guardar en app-data los datos para mostrar en show-camping
+                this.camping = {
+                    // _id: {
+                    //     $oid: event.target.dataset.item
+                    // },
+                    id: event.target.dataset.item,
+                    name: event.target.dataset.name,
+                    price: event.target.dataset.price,
+                    image: event.target.dataset.image,
+                    description: event.target.dataset.description,
+                    author: event.target.dataset.author,
+                    comments: JSON.parse(comment)
+                    }
+                //controlo que el usuario logado pueda editar sólo sus comentarios
+                
+                if (event.target.dataset.author == this.storedUser.name) {
+                    console.log("puede ver!!")
+                    this.canView = true;
+                } else {
+                    this.canView = false;
+                    console.log("NO puede ver!!")
+                }
+                
+                // var comments = JSON.parse(this.camping.comments);
+                // this.set('comments',comments);
+                console.log("seleccionado: " + this.camping.comments);
+
+            }
+            resetCamping() {
+                this.camping = {
+                    // id: "",
+                    name: "",
+                    price: "",
+                    image: "",
+                    description: ""            
+                };
+                console.log(this.storedUser);
+                if(this.storedUser == ""){
+                    this.storedUser = {
+                    loggedin: false
+                    };
+                    console.log("user: " + this.storedUser.loggedin);
+                }
+                this.editBlog = false;
+                console.log("this.editBlog = " + this.editBlog)
+            }
+            handlePosts(e,request){
+                console.log(request.response);
+                this.set('posts',request.response);
+                this.message = null;                
+            }
+        }          
+        window.customElements.define(MyView4.is, MyView4);
+    </script>
+</dom-module>
